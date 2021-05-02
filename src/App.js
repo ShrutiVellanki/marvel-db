@@ -1,7 +1,6 @@
 import { Component } from 'react';
-import crypto from 'crypto';
-import Album from './Album';
-import './App.css';
+import {fetchCharacters} from './APIServices'
+import Characters from './Characters';
 
 class App extends Component {
 
@@ -14,19 +13,12 @@ class App extends Component {
   }
 
   componentDidMount() {
-    const API_KEY = '03055d3ccaffc072dcf43dfd001f994f';
-    const PRIV_KEY = 'a821f6553164ae0c8134c654e933e78acd54bf9b';
-    const ts = new Date().getTime();
-    const hash = crypto.createHash('md5').update(ts + PRIV_KEY + API_KEY).digest('hex');
-    fetch(`https://gateway.marvel.com/v1/public/characters?apikey=${API_KEY}&ts=${ts}&hash=${hash}`)
-      .then(res => res.json())
-      .then(json => {
-        this.setState({
-          isLoaded: true,
-          items: json,
-        })
-        console.log(json);
+    fetchCharacters().then(characters =>
+      this.setState({
+        isLoaded: true,
+        items: characters,
       })
+    )
   }
 
   render() {
@@ -38,7 +30,7 @@ class App extends Component {
     }
     return (
       <div className="App">
-        <Album items={items}/>
+        <Characters items={items}/>
       </div>
     );
   }
