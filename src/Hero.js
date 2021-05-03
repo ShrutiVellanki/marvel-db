@@ -4,6 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
+import CharacterSearch from './CharacterSearch';
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -45,9 +46,7 @@ export default function Hero() {
             <div className={classes.heroButtons}>
               <Grid container spacing={2} justify="center">
                 <Grid item>
-                  <Button variant="contained" color="primary">
-                    View All Characters
-                  </Button>
+                  <CharacterSearch></CharacterSearch>
                 </Grid>
               </Grid>
             </div>

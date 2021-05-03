@@ -25,7 +25,6 @@ export default function Characters(props) {
   const pageChange = (event, value) => {
     const offset = (value - 1) * 99;
     fetchCharacters(99, offset).then(characters => {
-      console.log(characters);
       setCards(characters.data.results);
     })
   }
@@ -37,9 +36,6 @@ export default function Characters(props) {
       <main>
         <Hero></Hero>
         <Container className={classes.cardGrid} maxWidth="md">
-          {/* End hero unit */}
-          
-          
           <Grid container spacing={5}>
             {cards.map((card) => (
                 <Grid item key={card} xs={12} sm={6} md={4}>
@@ -48,7 +44,6 @@ export default function Characters(props) {
             ))}
               <Grid container justify="center"><Pagination count={props.total} onChange={pageChange}/></Grid>
           </Grid>
-
         </Container>
       </main>
       <Footer></Footer>
