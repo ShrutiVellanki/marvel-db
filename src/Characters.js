@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -13,6 +9,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
 import { fetchCharacters } from './APIServices'
+import CharacterCard from './Card';
 
 function Copyright() {
   return (
@@ -37,27 +34,6 @@ const useStyles = makeStyles((theme) => ({
   },
   heroButtons: {
     marginTop: theme.spacing(4),
-  },
-  cardGrid: {
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(8),
-  },
-  card: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  cardMediaBottom: {
-    paddingTop: '56.25%', // 16:9
-    backgroundColor: '#BEC2CB',
-    backgroundPosition: 'bottom'
-  },
-  cardMedia: {
-    paddingTop: '56.25%', // 16:9
-    backgroundColor: '#BEC2CB'
-  },
-  cardContent: {
-    flexGrow: 1,
   },
   footer: {
     backgroundColor: theme.palette.background.paper,
@@ -120,33 +96,7 @@ export default function Characters(props) {
           <Grid container spacing={5}>
             {cards.map((card) => (
                 <Grid item key={card} xs={12} sm={6} md={4}>
-                  <Card className={classes.card}>
-
-                      <CardMedia
-                        className={!card.thumbnail.path.endsWith("image_not_available") && !card.thumbnail.path.endsWith("4c002e0305708") ? classes.cardMedia: classes.cardMediaBottom}
-                        image={card.thumbnail.path + "." + card.thumbnail.extension}
-                        title={card.name}
-                      />
-                    <CardContent className={classes.cardContent}>
-                      <Typography gutterBottom variant="h6" component="h5">
-                        {card.name}
-                      </Typography>
-                      
-                      <Typography>- Last updated on <strong>{card.modified.split("T")[0]}</strong></Typography>
-                      { card.comics.available > 0 &&
-                        <Typography>- Found in <strong>{card.comics.available}</strong> comics</Typography>
-                      }
-                      { card.comics.available > 0 &&
-                        <Typography>- Found in <strong>{card.series.available}</strong> series</Typography>
-                      }
-                    </CardContent>
-                    
-                    <CardActions>
-                      <Button size="small" color="primary">
-                        View More
-                      </Button>
-                    </CardActions>
-                  </Card>
+                  <CharacterCard card={card}></CharacterCard>
                 </Grid>
             ))}
               <Grid container justify="center"><Pagination count={props.total} onChange={pageChange}/></Grid>
