@@ -13,24 +13,27 @@ class App extends Component {
   }
 
   componentDidMount() {
-    fetchCharacters().then(characters =>
-      this.setState({
-        isLoaded: true,
-        items: characters,
-      })
+    fetchCharacters().then(characters =>{
+        this.setState({
+          isLoaded: true,
+          items: characters.data.results,
+          total: characters.data.total
+        })
+      }
     )
   }
 
   render() {
 
-    var {isLoaded, items} = this.state;
+    let {isLoaded, items, total} = this.state;
+    total = Math.ceil(total / 99);
 
     if (!isLoaded) {
       return <div>Loading...</div>;
     }
     return (
       <div className="App">
-        <Characters items={items}/>
+        <Characters items={items} total={total}/>
       </div>
     );
   }

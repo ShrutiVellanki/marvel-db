@@ -6,7 +6,7 @@ const ts = new Date().getTime();
 const hash = crypto.createHash('md5').update(ts + PRIV_KEY + API_KEY).digest('hex');
 
 
-export const fetchCharacters = () => {
-    return fetch(`https://gateway.marvel.com/v1/public/characters?apikey=${API_KEY}&ts=${ts}&hash=${hash}`)
+export const fetchCharacters = (limit=99, offset=0) => {
+    return fetch(`https://gateway.marvel.com/v1/public/characters?apikey=${API_KEY}&ts=${ts}&hash=${hash}&limit=${limit}&offset=${offset}`)
       .then(res => res.json())
 }
