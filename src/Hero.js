@@ -1,5 +1,4 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
@@ -19,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Hero() {
+export default function Hero(props) {
   let classes = useStyles();
 
   return (
@@ -33,7 +32,7 @@ export default function Hero() {
               color="textPrimary"
               gutterBottom
             >
-              Marvel Character Wiki
+              Marvel Comics Database
             </Typography>
             <Typography
               variant="h5"
@@ -41,12 +40,12 @@ export default function Hero() {
               color="textSecondary"
               paragraph
             >
-              View your favourite characters by wikipedia
+              Search for characters & comic books.
             </Typography>
             <div className={classes.heroButtons}>
               <Grid container spacing={2} justify="center">
                 <Grid item>
-                  <CharacterSearch></CharacterSearch>
+                  <CharacterSearch handler={props.handler}></CharacterSearch>
                 </Grid>
               </Grid>
             </div>

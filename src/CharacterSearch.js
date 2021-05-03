@@ -27,8 +27,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function CharacterSearch() {
+
+export default function CharacterSearch(props) {
   const classes = useStyles();
+  let input = '';
+  const inputChanged = (e) => {
+    input = e.target.value;
+  }
 
   return (
     <Paper component="form" className={classes.root}>
@@ -36,8 +41,9 @@ export default function CharacterSearch() {
         className={classes.input}
         placeholder="Find Character"
         inputProps={{ 'aria-label': 'find character' }}
+        onChange={inputChanged}
       />
-      <IconButton type="submit" className={classes.iconButton} aria-label="search">
+      <IconButton  className={classes.iconButton} aria-label="search" onClick={props.handler(input)}>
         <SearchIcon />
       </IconButton>
     </Paper>

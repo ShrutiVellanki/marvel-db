@@ -29,12 +29,16 @@ export default function Characters(props) {
     })
   }
 
+  const charactersByName = (name) => {
+    console.log(name);
+  }
+
   return (
     <React.Fragment>
       <CssBaseline />
       <AppBar position="relative"></AppBar>
       <main>
-        <Hero></Hero>
+        <Hero handler={charactersByName}></Hero>
         <Container className={classes.cardGrid} maxWidth="md">
           <Grid container spacing={5}>
             {cards.map((card) => (

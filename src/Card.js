@@ -32,6 +32,27 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+function dateFormatter(date) {
+  let months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec"
+  ];
+  let formattedDate = date.split("T")[0];
+  let month = months[parseInt(formattedDate.split("-")[1]) - 1];
+  let year = formattedDate.split("-")[0];
+  return `${month}, ${year}`; 
+}
+
 export default function CharacterCard(props) {
  
   const classes = useStyles();
@@ -51,12 +72,9 @@ export default function CharacterCard(props) {
                 {card.name}
                 </Typography>
                 
-                <Typography>- Last updated on <strong>{card.modified.split("T")[0]}</strong></Typography>
+                <Typography>- Last updated on <strong>{dateFormatter(card.modified)}</strong></Typography>
                 { card.comics.available > 0 &&
                 <Typography>- Found in <strong>{card.comics.available}</strong> comics</Typography>
-                }
-                { card.comics.available > 0 &&
-                <Typography>- Found in <strong>{card.series.available}</strong> series</Typography>
                 }
             </CardContent>
             <CardActions>
