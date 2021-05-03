@@ -7,22 +7,10 @@ import Typography from '@material-ui/core/Typography';
 import Pagination from '@material-ui/lab/Pagination';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Link from '@material-ui/core/Link';
 import { fetchCharacters } from './APIServices'
 import CharacterCard from './Card';
+import Footer from './Footer';
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Shruti Vellanki
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 const useStyles = makeStyles((theme) => ({
   icon: {
@@ -34,10 +22,6 @@ const useStyles = makeStyles((theme) => ({
   },
   heroButtons: {
     marginTop: theme.spacing(4),
-  },
-  footer: {
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(6),
   },
 }));
 
@@ -104,20 +88,7 @@ export default function Characters(props) {
 
         </Container>
       </main>
-      {/* Footer */}
-      <footer className={classes.footer}>
-        {/* <div className={classes.heroButtons}>
-          <Grid container spacing={2} justify="center">
-            <Grid item>
-              <Button variant="contained">
-                Back To Top
-              </Button><br></br>
-            </Grid>
-          </Grid>
-        </div> */}
-        <Copyright />
-      </footer>
-      {/* End footer */}
+      <Footer></Footer>
     </React.Fragment>
   );
 }
