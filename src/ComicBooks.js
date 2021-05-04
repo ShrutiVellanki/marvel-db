@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Pagination from '@material-ui/lab/Pagination';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { fetchCharacters } from './APIServices'
+import { fetchCharacters, fetchComicsByCharacter } from './APIServices'
 import GenericCard from './Card';
 import Footer from './Footer';
 import Hero from './Hero';
@@ -18,27 +18,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Characters(props) {
+export default function ComicBooks(props) {
   const classes = useStyles();
-  const [cards, setCards] = useState();
-  const [total, setTotal] = useState();
+  const [cards, setCards] = useState(props.items);
 
+  const { match } = props;
+  const characterId = match.params.id;
 
-  fetchCharacters().then(characters =>{
-      setCards(characters.data.results);
-      setTotal(characters.data.total);
-    }
-  );
+  fetchComicsByCharacter(characterId).then(comics => {
+    setCards(comics.data.results);
+  })
 
   const pageChange = (event, value) => {
     const offset = (value - 1) * 99;
-    fetchCharacters(99, offset).then(characters => {
-      this.setState({cards : characters.data.results});
+    fetchComicsByCharacter(characterId, 99, offset).then(comics => {
+        setCards(comics.data.results);
     })
-  }
-
-  const charactersByName = (name) => {
-    console.log(name);
   }
 
   return (
@@ -46,18 +41,18 @@ export default function Characters(props) {
       <CssBaseline />
       <AppBar position="relative"></AppBar>
       <main>
-        <Hero handler={charactersByName}></Hero>
+        <Hero type="book"></Hero>
         <Container className={classes.cardGrid} maxWidth="md">
-          { cards &&
-            <Grid container spacing={5}>
-              { cards.map((card) => (
-                  <Grid item key={card} xs={12} sm={6} md={4}>
-                    <GenericCard card={card}></GenericCard>
-                  </Grid>
-              ))}
-                <Grid container justify="center"><Pagination count={total} onChange={pageChange}/></Grid>
-            </Grid>
-          }
+        { cards &&
+          <Grid container spacing={5}>
+            {cards.map((card) => (
+                <Grid item key={card} xs={12} sm={6} md={4}>
+                  <GenericCard card={card} type="book"></GenericCard>
+                </Grid>
+            ))}
+              <Grid container justify="center"><Pagination count={props.total} onChange={pageChange}/></Grid>
+          </Grid>
+        }
         </Container>
       </main>
       <Footer></Footer>

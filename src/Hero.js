@@ -32,23 +32,25 @@ export default function Hero(props) {
               color="textPrimary"
               gutterBottom
             >
-              Marvel Comics Database
+              Marvel DB
             </Typography>
             <Typography
-              variant="h5"
+              variant="subtitle1"
               align="center"
               color="textSecondary"
               paragraph
             >
-              Search for characters & comic books.
+              Find a full list of comic books that feature your favourite Marvel characters! 
             </Typography>
-            <div className={classes.heroButtons}>
-              <Grid container spacing={2} justify="center">
-                <Grid item>
-                  <CharacterSearch handler={props.handler}></CharacterSearch>
+            { props.type !== "book" && 
+              <div className={classes.heroButtons}>
+                <Grid container spacing={2} justify="center">
+                  <Grid item>
+                    <CharacterSearch handler={props.handler}></CharacterSearch>
+                  </Grid>
                 </Grid>
-              </Grid>
-            </div>
+              </div>
+            }
           </Container>
         </div>
     </React.Fragment>

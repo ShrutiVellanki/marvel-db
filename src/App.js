@@ -1,6 +1,9 @@
 import { Component } from 'react';
 import {fetchCharacters} from './APIServices'
 import Characters from './Characters';
+import ComicBooks from './ComicBooks';
+import {Link, Switch, Route, BrowserRouter as Router} from 'react-router-dom';
+import ErrorPage from './404';
 
 class App extends Component {
 
@@ -12,29 +15,27 @@ class App extends Component {
     }
   }
 
-  componentDidMount() {
-    fetchCharacters().then(characters =>{
-        this.setState({
-          isLoaded: true,
-          items: characters.data.results,
-          total: characters.data.total
-        })
-      }
-    )
-  }
-
   render() {
-
-    let {isLoaded, items, total} = this.state;
-    total = Math.ceil(total / 99);
-
-    if (!isLoaded) {
-      return <div>Loading...</div>;
-    }
     return (
-      <div className="App">
-        <Characters items={items} total={total}/>
-      </div>
+      <Router>
+        {/* A <Switch> looks through its children <Route>s and
+            renders the first one that matches the current URL. */}
+        <Switch>
+          <Route exact path="/:id/books" render={(props) => {
+            return (<ComicBooks {...props}/>)
+          }}>            
+          </Route>
+          <Route exact path="/characters">
+            <Characters/>
+          </Route>
+          <Route exact path="/">
+            <Characters/>
+          </Route>
+          <Route path="*">
+            <ErrorPage/>
+          </Route>
+        </Switch>
+    </Router>
     );
   }
 }
