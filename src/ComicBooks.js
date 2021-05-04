@@ -9,6 +9,7 @@ import { fetchCharacters, fetchComic, fetchComicsByCharacter } from './APIServic
 import GenericCard from './Card';
 import Footer from './Footer';
 import Hero from './Hero';
+import LoadingPage from './Loading';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -20,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ComicBooks(props) {
   const classes = useStyles();
-  const [cards, setCards] = useState(props.items);
+  const [cards, setCards] = useState();
 
   const { match } = props;
   const characterId = match.params.id;
@@ -46,19 +47,23 @@ export default function ComicBooks(props) {
     })
   }, [])  
 
-  const pageChange = (event, value) => {
-    const offset = (value - 1) * 99;
-    fetchComicsByCharacter(characterId, 99, offset).then(comics => {
-        setCards(comics.data.results);
-    })
-  }
+  // const pageChange = (event, value) => {
+  //   const offset = (value - 1) * 99;
+  //   fetchComicsByCharacter(characterId, 99, offset).then(comics => {
+  //       setCards(comics.data.results);
+  //   })
+  // }
 
   return (
     <React.Fragment>
       <CssBaseline />
       <AppBar position="relative"></AppBar>
+      {!cards || cards.length === 0 &&
+        <LoadingPage></LoadingPage>
+      }
+      {cards && cards.length > 0 &&
       <main>
-        <Hero type="book"></Hero>
+        <Hero type="book" character=""></Hero>
         <Container className={classes.cardGrid} maxWidth="md">
         { cards &&
           <Grid container spacing={5}>
@@ -67,11 +72,12 @@ export default function ComicBooks(props) {
                   <GenericCard card={card} type="book"></GenericCard>
                 </Grid>
             ))}
-              <Grid container justify="center"><Pagination count={props.total} onChange={pageChange}/></Grid>
+              {/* <Grid container justify="center"><Pagination count={props.total} onChange={pageChange}/></Grid> */}
           </Grid>
         }
         </Container>
       </main>
+      }
       <Footer></Footer>
     </React.Fragment>
   );
