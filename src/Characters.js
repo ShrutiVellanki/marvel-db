@@ -33,7 +33,7 @@ export default function Characters(props) {
   const pageChange = (event, value) => {
     const offset = (value - 1) * 99;
     fetchCharacters(99, offset).then(characters => {
-      this.setState({cards : characters.data.results});
+      this.setCard(characters.data.results);
     })
   }
 

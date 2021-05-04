@@ -7,6 +7,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   cardGrid: {
@@ -85,15 +86,17 @@ export default function GenericCard(props) {
                 {card.title}
                 </Typography>
                 
-                <Typography>{new DOMParser().parseFromString(card.description)}</Typography>
+                <Typography>{card.description}</Typography>
               </CardContent>
             }
             { props.type !== "book" &&
               <CardActions>
               { props.card.comics.available > 0 &&
-                <Button size="small" color="primary">
-                  View More
-                </Button>
+                <Link to={`/${props.card.id}/books`}>
+                  <Button size="small" color="primary">
+                    View More
+                  </Button>
+                </Link>
               }
               </CardActions>
             }
