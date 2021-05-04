@@ -35,7 +35,7 @@ export default function Hero(props) {
               Marvel DB
             </Typography>
             <Typography
-              variant="subtitle1"
+              variant="h6"
               align="center"
               color="textSecondary"
               paragraph

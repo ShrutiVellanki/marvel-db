@@ -9,6 +9,7 @@ import { fetchCharacters } from './APIServices'
 import GenericCard from './Card';
 import Footer from './Footer';
 import Hero from './Hero';
+import LoadingPage from './Loading';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -22,7 +23,7 @@ export default function Characters(props) {
   const classes = useStyles();
   const [cards, setCards] = useState();
   const [total, setTotal] = useState();
-
+  const [currentPage, setCurrentPage] = useState();
 
   useEffect(() => {
     fetchCharacters().then(characters =>{
@@ -32,36 +33,39 @@ export default function Characters(props) {
   }, [])  
 
   const pageChange = (event, value) => {
+    setCards([]);
     const offset = (value - 1) * 99;
     fetchCharacters(99, offset).then(characters => {
       setCards(characters.data.results);
     })
-  }
-
-  const charactersByName = (name) => {
-    console.log(name);
+    setCurrentPage(value);
   }
 
   return (
     <React.Fragment>
       <CssBaseline />
       <AppBar position="relative"></AppBar>
-      <main>
-        <Hero handler={charactersByName}></Hero>
-        <Container className={classes.cardGrid} maxWidth="md">
-          { cards &&
-            <Grid container spacing={5}>
-              { cards.map((card) => (
-                  <Grid item key={card.id} xs={12} sm={6} md={4}>
-                    <GenericCard card={card}></GenericCard>
-                  </Grid>
-              ))}
-                <Grid container justify="center"><Pagination count={16} onChange={pageChange}/></Grid>
-            </Grid>
-          }
-        </Container>
-      </main>
-      <Footer></Footer>
+      {!cards || cards.length === 0 &&
+        <LoadingPage></LoadingPage>
+      }
+      {cards && cards.length > 0 &&
+        <main>
+          <Hero></Hero>
+          <Container className={classes.cardGrid} maxWidth="md">
+            { cards &&
+              <Grid container spacing={5}>
+                { cards.map((card) => (
+                    <Grid item key={card.id} xs={12} sm={6} md={4}>
+                      <GenericCard card={card}></GenericCard>
+                    </Grid>
+                ))}
+                  <Grid container justify="center"><Pagination defaultPage={currentPage} count={16} onChange={pageChange}/></Grid>
+              </Grid>
+            }
+          </Container>
+          <Footer></Footer>
+        </main> 
+      }     
     </React.Fragment>
   );
 }

@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
 import Pagination from '@material-ui/lab/Pagination';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { fetchCharacters, fetchComicsByCharacter } from './APIServices'
+import { fetchCharacters, fetchComic, fetchComicsByCharacter } from './APIServices'
 import GenericCard from './Card';
 import Footer from './Footer';
 import Hero from './Hero';
@@ -25,9 +25,26 @@ export default function ComicBooks(props) {
   const { match } = props;
   const characterId = match.params.id;
 
-  fetchComicsByCharacter(characterId).then(comics => {
-    setCards(comics.data.results);
-  })
+  useEffect(() => {
+    fetchComicsByCharacter(characterId).then(comics => {
+      let comicIds = comics.map(comic => {
+        let uri = comic.resourceURI;
+        let id = uri.split("/").slice(-1)[0];
+        return parseInt(id);
+      });
+
+      let items = [];
+      comicIds.forEach(comicId => {
+        return fetchComic(comicId).then(item => {
+           items.push(item.data.results[0]);
+           if (comicIds.indexOf(comicId) === comicIds.length - 1) {
+             console.log(items);
+            setCards(items);
+           }
+        });
+      })
+    })
+  }, [])  
 
   const pageChange = (event, value) => {
     const offset = (value - 1) * 99;
