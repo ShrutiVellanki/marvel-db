@@ -42,7 +42,7 @@ export default function Hero(props) {
             >
               Find a full list of comic books that feature your favourite Marvel characters! 
             </Typography>
-            { props.type !== "book" && 
+            {/* { props.type !== "book" && 
               <div className={classes.heroButtons}>
                 <Grid container spacing={2} justify="center">
                   <Grid item>
@@ -50,7 +50,7 @@ export default function Hero(props) {
                   </Grid>
                 </Grid>
               </div>
-            }
+            } */}
           </Container>
         </div>
     </React.Fragment>

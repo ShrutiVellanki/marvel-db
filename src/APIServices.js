@@ -10,17 +10,16 @@ const ts = new Date().getTime();
 const hash = crypto.createHash('md5').update(ts + PRIV_KEY + API_KEY).digest('hex');
 
 export const fetchCharacters = (limit=99, offset=0) => {
-    return fetch(`https://gateway.marvel.com/v1/public/characters?apikey=${API_KEY}&ts=${ts}&hash=${hash}&limit=${limit}&offset=${offset}`)
-      .then(res => res.json())
+    return fetch(`http://importmarvel.com/api/characters?limit=${limit}&offset=${offset}`).then(res => res.json())
 }
 
-export const fetchCharacterByName = (name, limit=99, offset=0) => {
-  return fetch(`https://gateway.marvel.com:/v1/public/characters?nameStartsWith=${name}&apikey=${API_KEY}&ts=${ts}&hash=${hash}&limit=${limit}&offset=${offset}`)
-      .then(res => res.json())
-}
+// export const fetchCharacterByName = (name, limit=99, offset=0) => {
+//   return fetch(`http://importmarvel.com/api/characters?nameStartsWith=${name}limit=${limit}&offset=${offset}`)
+//       .then(res => res.json())
+// }
 
 export const fetchComicsByCharacter = (characterId, limit=99, offset=0) => {
-  return fetch(`https://gateway.marvel.com/v1/public/characters/${characterId}/comics?apikey=${API_KEY}&ts=${ts}&hash=${hash}&limit=${limit}&offset=${offset}`)
+  return fetch(`http://importmarvel.com/api/characters/${characterId}/comics?limit=${limit}&offset=${offset}`)
       .then(res => res.json())
 }
 

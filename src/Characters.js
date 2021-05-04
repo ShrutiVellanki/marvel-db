@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
@@ -24,16 +24,17 @@ export default function Characters(props) {
   const [total, setTotal] = useState();
 
 
-  fetchCharacters().then(characters =>{
+  useEffect(() => {
+    fetchCharacters().then(characters =>{
       setCards(characters.data.results);
       setTotal(characters.data.total);
-    }
-  );
+    });
+  }, [])  
 
   const pageChange = (event, value) => {
     const offset = (value - 1) * 99;
     fetchCharacters(99, offset).then(characters => {
-      this.setCard(characters.data.results);
+      setCards(characters.data.results);
     })
   }
 
@@ -51,11 +52,11 @@ export default function Characters(props) {
           { cards &&
             <Grid container spacing={5}>
               { cards.map((card) => (
-                  <Grid item key={card} xs={12} sm={6} md={4}>
+                  <Grid item key={card.id} xs={12} sm={6} md={4}>
                     <GenericCard card={card}></GenericCard>
                   </Grid>
               ))}
-                <Grid container justify="center"><Pagination count={total} onChange={pageChange}/></Grid>
+                <Grid container justify="center"><Pagination count={16} onChange={pageChange}/></Grid>
             </Grid>
           }
         </Container>
