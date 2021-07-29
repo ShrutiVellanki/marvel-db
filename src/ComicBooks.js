@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Pagination from '@material-ui/lab/Pagination';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { fetchCharacters, fetchComic, fetchComicsByCharacter } from './APIServices'
+import { MarvelApiService } from './APIServices'
 import GenericCard from './Card';
 import Footer from './Footer';
 import Hero from './Hero';
@@ -25,6 +25,7 @@ export default function ComicBooks(props) {
 
   const { match } = props;
   const characterId = match.params.id;
+  const service = new MarvelApiService();
 
   useEffect(() => {
     fetchComicsByCharacter(characterId).then(comics => {
@@ -36,7 +37,7 @@ export default function ComicBooks(props) {
 
       let items = [];
       comicIds.forEach(comicId => {
-        return fetchComic(comicId).then(item => {
+        return service.fetchComic(comicId).then(item => {
            items.push(item.data.results[0]);
            if (comicIds.indexOf(comicId) === comicIds.length - 1) {
              console.log(items);

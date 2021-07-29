@@ -5,7 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Pagination from '@material-ui/lab/Pagination';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { fetchCharacters } from './APIServices'
+import { MarvelApiService } from './APIServices'
 import GenericCard from './Card';
 import Footer from './Footer';
 import Hero from './Hero';
@@ -24,9 +24,11 @@ export default function Characters(props) {
   const [cards, setCards] = useState();
   const [total, setTotal] = useState();
   const [currentPage, setCurrentPage] = useState();
+  const service = new MarvelApiService();
 
   useEffect(() => {
-    fetchCharacters().then(characters =>{
+    service.getCharacters().then(characters => {
+        console.log(characters);
       setCards(characters.data.results);
       setTotal(characters.data.total);
     });
@@ -35,7 +37,7 @@ export default function Characters(props) {
   const pageChange = (event, value) => {
     setCards([]);
     const offset = (value - 1) * 99;
-    fetchCharacters(99, offset).then(characters => {
+    service.getCharacters(offset).then(characters => {
       setCards(characters.data.results);
     })
     setCurrentPage(value);
