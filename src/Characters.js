@@ -28,7 +28,6 @@ export default function Characters(props) {
 
   useEffect(() => {
     service.getCharacters().then(characters => {
-        console.log(characters);
       setCards(characters.data.results);
       setTotal(characters.data.total);
     });

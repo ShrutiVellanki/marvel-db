@@ -9,32 +9,52 @@ export class MarvelApiService {
     }
 
     async getCharacters (offset = 0) {
-        let storedCharacters = JSON.parse(localStorage.getItem('characters'));
-
-        if (!storedCharacters) {
-            storedCharacters = {};
-        }
-
-        if (!storedCharacters[offset]) {
-            const characters = await this.fetchCharacters();
-            storedCharacters[offset] = characters;
-            localStorage.setItem('characters', JSON.stringify(storedCharacters));
-            return characters;
-        }
-
-        return JSON.parse(localStorage.getItem('characters'))[offset];
+        return await this.checkLocalStorage('characters', offset, this.fetchCharacters.bind(this));
     }
 
     async fetchCharacters (offset = 0) {
         const url = `${(this.API_URL)}/characters?${(this.hashedKey)}&limit=99&offset=${offset}`;
-        const charactersReadableStream = await fetch(url);
-        return await charactersReadableStream.json();
+        return await this.fetchEntities(url);
+    }
+
+    async getComic (comicId) {
+        return await this.checkLocalStorage('comics', comicId, this.fetchComic.bind(this));
     }
 
     async fetchComic (comicId) {
-        const url = `${(this.API_URL)}/comics/${comicId}`;
-        const comicReadableStream = await fetch(url);
-        return await comicReadableStream.json();
+        const url = `${(this.API_URL)}/comics/${comicId}?${(this.hashedKey)}`;
+        return await this.fetchEntities(url);
+    }
+
+    async getComicsByCharacter(characterId) {
+        return await this.checkLocalStorage('comicsByCharacter', characterId, this.fetchComicsByCharacter.bind(this));
+    }
+
+    async fetchComicsByCharacter(characterId) {
+        const url = `${(this.API_URL)}/characters/${characterId}?${(this.hashedKey)}`;
+        return await this.fetchEntities(url);
+    }
+
+    async checkLocalStorage(key, id, fetchFunction) {
+        let entities = JSON.parse(localStorage.getItem(key));
+
+        if (!entities) {
+            entities = {};
+        }
+
+        if (!entities[id]) {
+            const entity = await fetchFunction();
+            entities[id] = entity;
+            localStorage.setItem(key , JSON.stringify(entities));
+            return entity;
+        }
+
+        return entities[id];
+    }
+
+    async fetchEntities(url) {
+        const readableStream = await fetch(url);
+        return await readableStream.json();
     }
 
     get hashedKey () {
@@ -50,45 +70,3 @@ export class MarvelApiService {
 // //   return fetch(`http://importmarvel.com/api/characters?nameStartsWith=${name}limit=${limit}&offset=${offset}`)
 // //       .then(res => res.json())
 // // }
-//
-// export const fetchComicsByCharacter = (characterId) => {
-//   return fetch(`http://importmarvel.com/api/characters/${characterId}`)
-//       .then(res => res.body)
-//       .then(body => {
-//           const reader = body.getReader();
-//
-//           return new ReadableStream({
-//             start(controller) {
-//               // The following function handles each data chunk
-//               function push() {
-//                 // "done" is a Boolean and value a "Uint8Array"
-//                 reader.read().then( ({done, value}) => {
-//                   // If there is no more data to read
-//                   if (done) {
-//                     console.log('done', done);
-//                     controller.close();
-//                     return;
-//                   }
-//                   // Get the data and send it to the browser via the controller
-//                   controller.enqueue(value);
-//                   // Check chunks by logging to the console
-//                   console.log(done, value);
-//                   push();
-//                 })
-//               }
-//
-//               push();
-//             }
-//           });
-//       })
-//       .then(stream => {
-//         // Respond with our stream
-//         return new Response(stream, { headers: { "Content-Type": "text/html" } }).text();
-//       })
-//       .then(result => {
-//         // Do things with result
-//         let jsonResult = JSON.parse(result);
-//         return jsonResult.data.results[0].comics.items
-//       })
-// }
-//

@@ -28,7 +28,7 @@ export default function ComicBooks(props) {
   const service = new MarvelApiService();
 
   useEffect(() => {
-    fetchComicsByCharacter(characterId).then(comics => {
+    service.fetchComicsByCharacter(characterId).then(comics => {
       let comicIds = comics.map(comic => {
         let uri = comic.resourceURI;
         let id = uri.split("/").slice(-1)[0];
@@ -37,7 +37,7 @@ export default function ComicBooks(props) {
 
       let items = [];
       comicIds.forEach(comicId => {
-        return service.fetchComic(comicId).then(item => {
+        return service.getComic(comicId).then(item => {
            items.push(item.data.results[0]);
            if (comicIds.indexOf(comicId) === comicIds.length - 1) {
              console.log(items);
